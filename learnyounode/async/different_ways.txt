@@ -1,0 +1,97 @@
+/**
+ * Created by ivo-dukov on 2/2/16.
+ */
+
+'use strict';
+
+var fs          = require('fs'),
+    async       = require('async'),
+    fileName    = process.argv[2];
+
+var callback = function (err, result) {
+    if (err) {
+        return console.error(err);
+    }
+
+    console.log(result.split('\n').length);
+};
+
+fs.readFile(fileName, 'utf8', callback);
+
+var delayedFunction = function (name, callback) {
+    setTimeout(function () {
+        callback(null, { name: name });
+    }, 1000);
+};
+
+delayedFunction('Valio', function (err, result) {
+    if (err) {
+        return console.error(err);
+    }
+
+    console.log(result.name);
+});
+
+
+async.series([
+    function (callback) {
+        delayedFunction('Valio', callback);
+    },
+    function (callback) {
+        delayedFunction('Valio', callback);
+    },
+    function (callback) {
+        delayedFunction('Valio', callback);
+    },
+    function (callback) {
+        delayedFunction('Valio', callback);
+    },
+    function (callback) {
+        delayedFunction('Valio', callback);
+    }
+], function (err, result) {
+    if (err) {
+        return console.error(err);
+    }
+
+    console.log(result);
+});
+
+var addOne = function (number, callback) {
+    setTimeout(function () {
+        callback(null, number + 1);
+    }, 500);
+};
+
+async.waterfall([
+    function (callback) {
+        addOne(1, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    },
+    function (number, callback) {
+        addOne(number, callback);
+    }
+], function (err, result) {
+    if (err) {
+        return console.error(err);
+    }
+
+    console.log(result);
+});
